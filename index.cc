@@ -243,6 +243,13 @@ class MPVInstance : public pp::Instance {
     PostData("property_change", dict);
   }
 
+  void PostEvent(mpv_event_id event_id, const int error) {
+    pp::VarDictionary dict;
+    dict.Set(Var("id"), Var(event_id));
+    dict.Set(Var("error"), Var(error));
+    PostData("event", dict);
+  }
+
   void HandleMPVEvents(int32_t) {
     for (;;) {
       mpv_event* event = mpv_wait_event(mpv_, 0);
@@ -251,6 +258,8 @@ class MPVInstance : public pp::Instance {
       if (event->event_id == MPV_EVENT_PROPERTY_CHANGE ||
         event->event_id == MPV_EVENT_GET_PROPERTY_REPLY) {
         HandleMPVPropertyChange(static_cast<mpv_event_property*>(event->data));
+      } else {
+        PostEvent(event->event_id, event->error);
       }
     }
   }

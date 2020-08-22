@@ -18,7 +18,7 @@ app.on("ready", () => {
     autoHideMenuBar: true,
     useContentSize: process.platform !== "linux",
     title: "mpv.js example player",
-    webPreferences: {plugins: true},
+    webPreferences: {nodeIntegration: true, plugins: true},
   });
   win.setMenu(null);
   win.loadURL(`file://${__dirname}/index.html`);

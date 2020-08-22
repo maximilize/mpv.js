@@ -167,6 +167,8 @@ class ReactMPV extends React.PureComponent {
       this.props.onPropertyChange(name, value);
     } else if (type === "ready" && this.props.onReady) {
       this.props.onReady(this);
+    } else if (type === "event" && this.props.onEvent) {
+      this.props.onEvent(data.id, data.error);
     }
   }
   componentDidMount() {
@@ -180,6 +182,7 @@ class ReactMPV extends React.PureComponent {
       style: Object.assign(defaultStyle, this.props.style),
     });
     delete props.onReady;
+    delete props.onEvent;
     delete props.onPropertyChange;
     return React.createElement("embed", props);
   }
@@ -205,6 +208,13 @@ ReactMPV.propTypes = {
    * @param {Object} mpv - Component instance
    */
   onReady: PropTypes.func,
+  /**
+   * Callback function that is fired when mpv is firing an event.
+   *
+   * @param {Number} eventId - Mpv event ID
+   * @param {Number} error - Integer value of an error
+   */
+  onEvent: PropTypes.func,
   /**
    * Callback function that is fired when one of the observed properties
    * changes.
